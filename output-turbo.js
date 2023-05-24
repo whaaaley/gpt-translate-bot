@@ -1,9 +1,12 @@
-
 import { Application, Router } from 'https://deno.land/x/oak/mod.ts';
+import { config } from 'https://deno.land/x/dotenv/mod.ts';
 
 const app = new Application();
 const router = new Router();
 const PORT = 3000;
+
+// Load environment variables from .env file
+config({ export: true });
 
 // Utility function to translate a message using the OpenAI API
 async function translateMessage(message) {
@@ -81,6 +84,7 @@ async function sendInteractionResponse(interactionId, interactionToken, response
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bot ${discordConfig.botToken}`,
     },
     body: JSON.stringify(responsePayload),
   });
