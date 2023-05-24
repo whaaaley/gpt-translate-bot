@@ -5,18 +5,18 @@ import 'dotenv/load.ts'
 const env = {
   OPENAI_API_KEY: Deno.env.get('OPENAI_API_KEY'),
   DISCORD_TOKEN: Deno.env.get('DISCORD_TOKEN'),
-  DISCORD_CHANNEL_ID: '1110790268040515705',
+  DISCORD_CHANNEL_ID: '1110790268040515705'
 }
 
 // Utility function to translate a message using the OpenAI API
-const translateMessage = async (message) => {
-  const openaiApiUrl = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+const translateMessage = async message => {
+  const openaiApiUrl = 'https://api.openai.com/v1/engines/davinci-codex/completions'
 
   const response = await fetch(openaiApiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+      'Authorization': `Bearer ${env.OPENAI_API_KEY}`
     },
     body: JSON.stringify({
       prompt: `Translate the following message to Spanish: "${message}"`,
@@ -27,19 +27,14 @@ const translateMessage = async (message) => {
       presence_penalty: 0,
       stop: '\n',
       n: 1,
-      model: 'gpt-3.5-turbo',
-    }),
-  });
+      model: 'gpt-3.5-turbo'
+    })
+  })
 
-  const data = await response.json();
-  const translatedMessage = data.choices[0].text.trim();
+  const data = await response.json()
+  const translatedMessage = data.choices[0].text.trim()
 
-  return translatedMessage;
-}
-
-// Helper function to send WebSocket messages
-const wsSend = (ws, payload) => {
-  ws.send(JSON.stringify(payload));
+  return translatedMessage
 }
 
 // Start listening for new messages
@@ -54,6 +49,11 @@ const startListening = async () => {
 
     // Open a WebSocket connection to the gateway
     const ws = new WebSocket(`${gateway}/?v=10&encoding=json`)
+
+    // Helper function to send WebSocket messages
+    const wsSend = payload => {
+      ws.send(JSON.stringify(payload))
+    }
 
     // Event listener for WebSocket connection
     ws.addEventListener('open', () => {
