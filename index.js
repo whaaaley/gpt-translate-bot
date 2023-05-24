@@ -1,9 +1,11 @@
+
 import 'dotenv/load.ts'
 
 // Load Environment Variables
 const env = {
   OPENAI_API_KEY: Deno.env.get('OPENAI_API_KEY'),
-  DISCORD_TOKEN: Deno.env.get('DISCORD_TOKEN')
+  DISCORD_TOKEN: Deno.env.get('DISCORD_TOKEN'),
+  DISCORD_CHANNEL_ID: '1110790268040515705',
 }
 
 // Utility function to translate a message using the OpenAI API
@@ -35,6 +37,11 @@ async function translateMessage(message) {
   return translatedMessage;
 }
 
+// Helper function to send WebSocket messages
+function wsSend(ws, payload) {
+  ws.send(JSON.stringify(payload));
+}
+
 // Start listening for new messages
 async function startListening() {
   const gatewayUrl = 'https://discord.com/api/v10/gateway'
@@ -62,19 +69,22 @@ async function startListening() {
         const { heartbeat_interval } = payload.d
 
         setInterval(() => {
-          ws.send(JSON.stringify({ op: 1, d: null }))
+          wsSend(ws, {
+            op: 1,
+            d: null
+          })
         }, heartbeat_interval)
       }
 
       if (payload.op === 11) {
         // Start listening for events
-        ws.send(JSON.stringify({
+        wsSend(ws, {
           op: 2,
           d: {
             token: env.DISCORD_TOKEN,
             intents: 1 << 0
           }
-        }))
+        })
       }
 
       if (payload.op === 0 && payload.t === 'MESSAGE_CREATE') {
@@ -82,8 +92,16 @@ async function startListening() {
 
         if (message.channel_id === channelId) {
           const translatedMessage = await translateMessage(message.content)
-          // Do something with the translated message, such as sending it to another channel
-          console.log('Translated Message:', translatedMessage)
+
+          const replyPayload = {
+            content: translatedMessage,
+            channel_id: message.channel_id
+          }
+
+          wsSend(ws, {
+            op: 1,
+            d: replyPayload
+          })
         }
       }
     })
