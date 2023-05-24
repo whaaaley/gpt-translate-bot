@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "dotenv/": "https://deno.land/std@0.184.0/dotenv/",
+    "nacl": "https://cdn.skypack.dev/tweetnacl@v1.0.3"
+  }
+}
