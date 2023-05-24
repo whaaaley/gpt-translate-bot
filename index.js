@@ -9,7 +9,7 @@ const env = {
 }
 
 // Utility function to translate a message using the OpenAI API
-async function translateMessage(message) {
+const translateMessage = async (message) => {
   const openaiApiUrl = 'https://api.openai.com/v1/engines/davinci-codex/completions';
 
   const response = await fetch(openaiApiUrl, {
@@ -38,12 +38,12 @@ async function translateMessage(message) {
 }
 
 // Helper function to send WebSocket messages
-function wsSend(ws, payload) {
+const wsSend = (ws, payload) => {
   ws.send(JSON.stringify(payload));
 }
 
 // Start listening for new messages
-async function startListening() {
+const startListening = async () => {
   const gatewayUrl = 'https://discord.com/api/v10/gateway'
 
   try {
