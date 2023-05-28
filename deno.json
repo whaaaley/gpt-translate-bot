@@ -1,6 +1,8 @@
 {
   "imports": {
     "dotenv/": "https://deno.land/std@0.184.0/dotenv/",
-    "nacl": "https://cdn.skypack.dev/tweetnacl@v1.0.3"
+    "nacl": "https://cdn.skypack.dev/tweetnacl@v1.0.3",
+    "lru-cache-skypack": "https://cdn.skypack.dev/lru-cache@9.1.1",
+    "lru-cache": "https://unpkg.com/lru-cache@9.1.1/dist/mjs/index.js"
   }
 }
