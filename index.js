@@ -7,13 +7,13 @@ const env = {
 
 const start = async () => {
   try {
-    const response = await fetch(env.DISCORD_GATEWAY)
+    const res = await fetch(env.DISCORD_GATEWAY)
 
-    if (!response.ok) {
-      throw new Error(`Gateway fetch request failed with status: ${response.status}`)
+    if (!res.ok) {
+      throw new Error(`Gateway fetch request failed with status: ${res.status}`)
     }
 
-    const data = await response.json()
+    const data = await res.json()
     const ws = new WebSocket(`${data.url}/?v=10&encoding=json`)
 
     ws.addEventListener('open', () => {

@@ -1,0 +1,10 @@
+{
+  "name": "gpt-translate-bot",
+  "version": "1.0.0",
+  "description": "Discord bot that translates messages using GPT-3.5",
+  "main": "index.js",
+  "type": "module",
+  "optionalDependencies": {
+    "eslint": "^8.41.0"
+  }
+}
